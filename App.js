@@ -1,13 +1,23 @@
 
 import React, { useState, useEffect } from 'react';
 import { Text, StyleSheet, View, StatusBar, Image, Animated } from 'react-native';
-import rocket from "./app/assets/rocket.png"
+import {GestureHandlerRootView} from 'react-native-gesture-handler';
+import { NavigationContainer } from '@react-navigation/native';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
 
+import rocket from "./app/assets/rocket.png";
+
+import Home from './app/screens/Home';
+import Rover from './app/screens/Rover';
+import Detail from './app/screens/Detail';
+
+const Stack = createNativeStackNavigator();
 
 const App = () => {
   const [animation, setanimation] = useState(false)
   const [show] = useState(new Animated.Value(0))
   const [position] = useState(new Animated.Value(700))
+  const [font] = useState(new Animated.Value(1))
 
   useEffect(() => {
     Animated.parallel([
@@ -18,17 +28,17 @@ const App = () => {
         useNativeDriver: false
       }),
       Animated.timing(position, {
-        toValue: -700,
-        duration: 1000,
+        toValue: -600,
+        duration: 2000,
         useNativeDriver: false
       })
     ]).start(() =>
       Animated.timing(font, {
         toValue: 200,
-        duration: 100,
-        delay: 3000,
+        duration: 500,
+        delay: 2000,
         useNativeDriver: false,
-      }).start(() => setAnimated(true))
+      }).start(() => setanimation(true))
     );
   }, [])
   if(!animation)
@@ -36,15 +46,15 @@ const App = () => {
     <>
       <StatusBar
         animated={true}
-        backgroundColor="#003b59"
+        backgroundColor="#142950"
         barStyle="light-content"
       />
       <View style={styles.viewContainer}>
         <Animated.Image
-          source={rocket}
           style={[styles.imageRocket, { top: position }]}
+          source={rocket}
         />
-        <Animated.Text style={[styles.textHello, { opacity: show }]} >
+        <Animated.Text style={[styles.textHello, { opacity: show,  transform: [{scale: font}]}]} >
           Welcome
           </Animated.Text>
 
@@ -53,7 +63,32 @@ const App = () => {
   );
   else
   return(
-    
+    <GestureHandlerRootView style={{flex:1}}>
+      <StatusBar
+      animated={true}
+      backgroundColor="#142950"
+      barStyle="light-content"
+      />
+      <NavigationContainer>
+      <Stack.Navigator>
+      <Stack.Screen
+          name={"Home"}
+          component={Home}
+          options={{title: 'My Rovers'}}
+        />
+        <Stack.Screen
+          name={"Detail"}
+          component={Detail}
+          options={{title: 'Images'}}
+        />
+        <Stack.Screen
+          name={"Rover"}
+          component={Rover}
+          options={{title: 'Add Rover'}}
+        />
+      </Stack.Navigator>
+      </NavigationContainer>
+    </GestureHandlerRootView>
   )
 }
 
@@ -64,15 +99,15 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "space-around",
-    backgroundColor: "green"
+    backgroundColor: "#142950"
   },
   textHello: {
     fontSize: 50,
     color: "white"
   },
   imageRocket: {
-    width: 40,
-    height: 40,
+    width: 70,
+    height: 70,
     resizeMode: 'contain',
   }
 })
