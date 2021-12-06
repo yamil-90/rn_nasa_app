@@ -14,7 +14,7 @@ import Detail from './app/screens/Detail';
 const Stack = createNativeStackNavigator();
 
 const App = () => {
-  const [animation, setanimation] = useState(false)
+  const [animation, setAnimation] = useState(false)
   const [show] = useState(new Animated.Value(0))
   const [position] = useState(new Animated.Value(700))
   const [font] = useState(new Animated.Value(1))
@@ -38,7 +38,7 @@ const App = () => {
         duration: 500,
         delay: 2000,
         useNativeDriver: false,
-      }).start(() => setanimation(true))
+      }).start(() => setAnimation(true))
     );
   }, [])
   if(!animation)
